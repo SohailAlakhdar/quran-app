@@ -22,7 +22,6 @@ app.use(helmet());
 app.use(cors({
   origin: [
     process.env.CLIENT_URL,
-    "http://localhost:4200",
   ]
 }));
 app.use(express.json());

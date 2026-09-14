@@ -35,7 +35,7 @@ async function submitAnswer(req, res, next) {
 // GET /api/quizzes/:quizId/result
 async function getResult(req, res, next) {
   try {
-    const quiz = await Quiz.findById(req.params.quizId).populate('surah', 'name arabicName number');
+    const quiz = await Quiz.findById({ _id: req.params.quizId, isActive: true }).populate('surah', 'name arabicName number');
     if (!quiz) return error(res, 404, 'الاختبار غير موجود.');
     if (String(quiz.user) !== String(req.user._id)) {
       return error(res, 403, 'غير مصرح لك بالوصول لهذا الاختبار.');
@@ -65,7 +65,7 @@ async function getResult(req, res, next) {
 // GET /api/quizzes/:quizId/review
 async function getReview(req, res, next) {
   try {
-    const quiz = await Quiz.findById(req.params.quizId).populate({
+    const quiz = await Quiz.findById({ _id: req.params.quizId, isActive: true }).populate({
       path: 'answers.question',
       select: 'text options correctAnswer explanation'
     }).populate('questions');

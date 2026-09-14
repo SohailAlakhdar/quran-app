@@ -12,9 +12,23 @@ const achievementSchema = new mongoose.Schema(
         required: true
       },
       value: { type: Number, default: 1 }
-    }
+    },
+    isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
+// hook in searching
+achievementSchema.index({ isActive: 1 });
+function hideInactiveByDefault(next) {
+  const options = this.getOptions();
+  if (!options.includeInactive && this.getFilter().isActive === undefined) {
+    this.where({ isActive: true });
+  }
+  next();
+}
+
+achievementSchema.pre('find', hideInactiveByDefault);
+achievementSchema.pre('findOne', hideInactiveByDefault);
+achievementSchema.pre('countDocuments', hideInactiveByDefault);
 
 module.exports = mongoose.model('Achievement', achievementSchema);

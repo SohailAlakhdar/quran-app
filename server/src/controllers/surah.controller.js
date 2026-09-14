@@ -14,7 +14,7 @@ async function getSurahs(req, res, next) {
 // GET /api/surahs/:id
 async function getSurahById(req, res, next) {
   try {
-    const surah = await Surah.findById(req.params.id);
+    const surah = await Surah.findById({ _id: req.params.id, isActive: true });
     if (!surah) return error(res, 404, 'السورة غير موجودة.');
     return success(res, 200, 'تم جلب السورة بنجاح.', { surah });
   } catch (err) {
@@ -49,7 +49,11 @@ async function updateSurah(req, res, next) {
 // DELETE /api/admin/surahs/:id
 async function deleteSurah(req, res, next) {
   try {
-    const surah = await Surah.findByIdAndDelete(req.params.id);
+    const surah = await Surah.findOneAndUpdate(
+      { _id: req.params.id, isActive: true },
+      { isActive: false },
+      { new: true }
+    );
     if (!surah) return error(res, 404, 'السورة غير موجودة.');
     return success(res, 200, 'تم حذف السورة بنجاح.');
   } catch (err) {

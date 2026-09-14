@@ -3,7 +3,7 @@ const { body } = require('express-validator');
 const signupValidator = [
   body('firstName')
     .trim()
-    .notEmpty().withMessage('الاسم الأول مطلوب')
+    .notEmpty().withMessage('الاسم الثلاثي مطلوب')
     .isLength({ min: 2, max: 50 }).withMessage('الاسم يجب أن يكون بين 2 و 50 حرفاً'),
   body('password')
     .notEmpty().withMessage('كلمة المرور مطلوبة')
@@ -11,7 +11,7 @@ const signupValidator = [
 ];
 
 const loginValidator = [
-  body('firstName').trim().notEmpty().withMessage('الاسم الأول مطلوب'),
+  body('firstName').trim().notEmpty().withMessage('الاسم الثلاثي مطلوب'),
   body('password').notEmpty().withMessage('كلمة المرور مطلوبة')
 ];
 

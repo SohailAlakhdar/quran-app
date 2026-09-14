@@ -41,12 +41,12 @@ async function getAdminQuestions(req, res, next) {
     }
 
     const [questions, total] = await Promise.all([
-      Question.find(filters)
+      Question.find({ ...filters, isActive: true })
         .populate('surah', 'name arabicName number')
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit),
-      Question.countDocuments(filters)
+      Question.countDocuments({ ...filters, isActive: true })
     ]);
 
     return success(res, 200, 'تم جلب الأسئلة بنجاح.', {
@@ -61,7 +61,7 @@ async function getAdminQuestions(req, res, next) {
 // GET /api/admin/questions/:id
 async function getAdminQuestionById(req, res, next) {
   try {
-    const question = await Question.findById(req.params.id).populate('surah', 'name arabicName number');
+    const question = await Question.findOne({ _id: req.params.id, isActive: true }).populate('surah', 'name arabicName number');
     if (!question) return error(res, 404, 'السؤال غير موجود.');
     return success(res, 200, 'تم جلب السؤال بنجاح.', { question });
   } catch (err) {
@@ -82,7 +82,7 @@ async function createQuestion(req, res, next) {
 // PUT /api/admin/questions/:id
 async function updateQuestion(req, res, next) {
   try {
-    const question = await Question.findByIdAndUpdate(req.params.id, req.body, {
+    const question = await Question.findByIdAndUpdate({_id:req.params.id, isActive: true}, req.body, {
       new: true,
       runValidators: true
     });
@@ -96,7 +96,11 @@ async function updateQuestion(req, res, next) {
 // DELETE /api/admin/questions/:id
 async function deleteQuestion(req, res, next) {
   try {
-    const question = await Question.findByIdAndDelete(req.params.id);
+    const question = await Question.findOneAndUpdate(
+      { _id: req.params.id, isActive: true },
+      { isActive: false },
+      { new: true }
+    );
     if (!question) return error(res, 404, 'السؤال غير موجود.');
     return success(res, 200, 'تم حذف السؤال.');
   } catch (err) {

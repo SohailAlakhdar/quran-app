@@ -21,7 +21,7 @@ async function signup(req, res, next) {
 async function login(req, res, next) {
   try {
     const { firstName, password } = req.body;
-    const user = await User.findOne({ firstName }).select('+password');
+    const user = await User.findOne({ firstName, isActive: true }).select('+password');
     if (!user) {
       return error(res, 401, 'بيانات الدخول غير صحيحة.');
     }

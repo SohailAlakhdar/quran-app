@@ -98,9 +98,9 @@ async function deleteUser(req, res, next) {
 
     // Clean up everything tied to this child so no orphaned records remain.
     await Promise.all([
-      Quiz.deleteMany({ user: user._id }),
-      UserAchievement.deleteMany({ user: user._id }),
-      User.findByIdAndDelete(user._id)
+      Quiz.updateMany({ user: user._id }, { $set: { isActive: false } }),
+      UserAchievement.updateMany({ user: user._id }, { $set: { isActive: false } }),
+      User.findByIdAndUpdate(user._id, { isActive: false })
     ]);
 
     return success(res, 200, `تم حذف الطفل "${user.firstName}" وكل بياناته بنجاح.`);

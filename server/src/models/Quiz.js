@@ -25,11 +25,23 @@ const quizSchema = new mongoose.Schema(
     starsEarned: { type: Number, default: 0 },
     status: { type: String, enum: ['in_progress', 'completed'], default: 'in_progress', index: true },
     startedAt: { type: Date, default: Date.now },
-    completedAt: { type: Date }
+    completedAt: { type: Date },
+    isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
 
 quizSchema.index({ user: 1, status: 1, createdAt: -1 });
+quizSchema.index({ surah: 1, type: 1, isActive: 1 });
+function hideInactiveByDefault(next) {
+  const options = this.getOptions();
+  if (!options.includeInactive && this.getFilter().isActive === undefined) {
+    this.where({ isActive: true });
+  }
+  next();
+}
 
+quizSchema.pre('find', hideInactiveByDefault);
+quizSchema.pre('findOne', hideInactiveByDefault);
+quizSchema.pre('countDocuments', hideInactiveByDefault);
 module.exports = mongoose.model('Quiz', quizSchema);

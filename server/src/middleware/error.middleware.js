@@ -19,6 +19,10 @@ function errorHandler(err, req, res, next) {
   }
 
   if (err.code === 11000) {
+    const field = Object.keys(err.keyValue || {})[0];
+    if (field === 'firstName') {
+      return error(res, 409, `الاسم "${err.keyValue.firstName}" مستخدم بالفعل، الرجاء اختيار اسم آخر.`);
+    }
     return error(res, 409, 'البيانات موجودة مسبقاً.');
   }
 

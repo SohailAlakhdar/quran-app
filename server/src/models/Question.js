@@ -35,11 +35,22 @@ const questionSchema = new mongoose.Schema(
       default: 'medium'
     },
     isActive: { type: Boolean, default: true, index: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    isActive: { type: Boolean, default: true }
   },
   { timestamps: true }
 );
 
 questionSchema.index({ surah: 1, type: 1, isActive: 1 });
+function hideInactiveByDefault(next) {
+  const options = this.getOptions();
+  if (!options.includeInactive && this.getFilter().isActive === undefined) {
+    this.where({ isActive: true });
+  }
+  next();
+}
 
+questionSchema.pre('find', hideInactiveByDefault);
+questionSchema.pre('findOne', hideInactiveByDefault);
+questionSchema.pre('countDocuments', hideInactiveByDefault);
 module.exports = mongoose.model('Question', questionSchema);

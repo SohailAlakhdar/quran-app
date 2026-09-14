@@ -20,7 +20,7 @@ import { ToastService } from '../../../core/services/toast.service';
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label class="form-label fw-semibold">الاسم الأول</label>
+            <label class="form-label fw-semibold">الاسم الثلاثي</label>
             <input type="text" class="form-control form-control-lg" formControlName="firstName" placeholder="اكتب اسمك">
           </div>
 

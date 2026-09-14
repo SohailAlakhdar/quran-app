@@ -36,16 +36,34 @@ const userSchema = new mongoose.Schema(
 // globally unique since children may share the same first name.
 userSchema.index({ firstName: 1, createdAt: -1 });
 
+function normalizePassword(password) {
+  const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
+  let normalized = password
+    .split('')
+    .map((char) => {
+      const idx = arabicDigits.indexOf(char);
+      return idx !== -1 ? String(idx) : char;
+    })
+    .join('');
+  return normalized.toLowerCase();
+}
+
 userSchema.pre('save', async function hashPassword(next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  console.log('Hashing password for user:', normalizePassword(this.password));
+  this.password = normalizePassword(this.password)
+  // this.password = await bcrypt.hash(normalizePassword(this.password), salt);
+  console.log('normalize test:', normalizePassword('Ss123٠١٢'))
   next();
 });
 
 userSchema.methods.comparePassword = function comparePassword(candidate) {
-  return bcrypt.compare(candidate, this.password);
+  console.log('Hashing password for user:', normalizePassword(this.password));
+  return bcrypt.compare(normalizePassword(candidate), this.password);
 };
+
+
 
 userSchema.methods.toSafeObject = function toSafeObject() {
   const obj = this.toObject();

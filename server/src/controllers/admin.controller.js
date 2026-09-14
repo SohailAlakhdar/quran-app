@@ -3,6 +3,7 @@ const Question = require('../models/Question');
 const Surah = require('../models/Surah');
 const Quiz = require('../models/Quiz');
 const { success } = require('../utils/apiResponse');
+const UserAchievement = require('../models/UserAchievement');
 
 // GET /api/admin/statistics
 async function getStatistics(req, res, next) {
@@ -83,4 +84,29 @@ async function getUsers(req, res, next) {
   }
 }
 
-module.exports = { getStatistics, getUsers };
+
+// DELETE /api/admin/users/:id
+async function deleteUser(req, res, next) {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return error(res, 404, 'المستخدم غير موجود.');
+    }
+    if (user.role === 'admin') {
+      return error(res, 403, 'لا يمكن حذف حساب مشرف من هنا.');
+    }
+
+    // Clean up everything tied to this child so no orphaned records remain.
+    await Promise.all([
+      Quiz.deleteMany({ user: user._id }),
+      UserAchievement.deleteMany({ user: user._id }),
+      User.findByIdAndDelete(user._id)
+    ]);
+
+    return success(res, 200, `تم حذف الطفل "${user.firstName}" وكل بياناته بنجاح.`);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getStatistics, getUsers, deleteUser };

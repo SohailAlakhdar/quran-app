@@ -21,8 +21,7 @@ app.use(helmet());
 
 app.use(cors({
   origin: [
-    process.env.CLIENT_URL,
-  ]
+    process.env.CLIENT_URL  ]
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -35,7 +34,6 @@ if (process.env.NODE_ENV !== 'test') {
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'الخادم يعمل بنجاح.', data: { status: 'ok' } });
 });
-
 app.use('/api/auth', authRoutes);
 app.use('/api/surahs', surahRoutes);
 app.use('/api/questions', questionRoutes);

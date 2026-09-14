@@ -32,6 +32,7 @@ import { Paginated } from '../../../core/models/api-response.model';
                 <th>متوسط النتائج</th>
                 <th>النجوم</th>
                 <th>آخر نشاط</th>
+<th>إجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -43,6 +44,11 @@ import { Paginated } from '../../../core/models/api-response.model';
                   <td>{{ u.averageScore }}%</td>
                   <td><i class="bi bi-star-fill text-warning"></i> {{ u.stars }}</td>
                   <td>{{ u.lastActivity | date: 'short' }}</td>
+<td>
+  <button class="btn btn-sm btn-outline-danger" (click)="remove(u)">
+    <i class="bi bi-trash"></i>
+  </button>
+</td>
                 </tr>
               }
             </tbody>
@@ -96,5 +102,11 @@ export class AdminUsersComponent implements OnInit {
   goToPage(pg: number): void {
     this.page = pg;
     this.fetch();
+  }
+  remove(u: User): void {
+    if (!confirm(`هل أنت متأكد من حذف "${u.firstName}"؟ سيتم حذف كل بياناته نهائياً.`)) return;
+    this.userService.deleteUser(u._id).subscribe(() => {
+      this.fetch();
+    });
   }
 }

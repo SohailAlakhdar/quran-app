@@ -8,11 +8,14 @@ import { User } from '../models/user.model';
 export class UserService {
   private readonly apiUrl = `${environment.apiUrl}/admin/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getUsers(page = 1, limit = 10, search = '') {
     let params = new HttpParams().set('page', page).set('limit', limit);
     if (search) params = params.set('search', search);
     return this.http.get<ApiResponse<Paginated<User>>>(this.apiUrl, { params });
+  }
+  deleteUser(id: string) {
+    return this.http.delete<ApiResponse<null>>(`${this.apiUrl}/${id}`);
   }
 }

@@ -9,8 +9,8 @@ async function signup(req, res, next) {
 
     // Public signup can only ever create "child" accounts, regardless of
     // any role field an attacker might try to inject.
+    console.log({ password });
     const user = await User.create({ firstName, password, role: 'child' });
-
     const token = signToken({ userId: user._id, role: user.role });
     return success(res, 201, 'تم إنشاء الحساب بنجاح.', { token, user: user.toSafeObject() });
   } catch (err) {
@@ -22,7 +22,7 @@ async function signup(req, res, next) {
 async function login(req, res, next) {
   try {
     const { firstName, password } = req.body;
-
+    console.log({ password });
     const user = await User.findOne({ firstName }).select('+password');
     if (!user) {
       return error(res, 401, 'بيانات الدخول غير صحيحة.');
@@ -35,7 +35,6 @@ async function login(req, res, next) {
 
     user.lastActivity = new Date();
     await user.save();
-
     const token = signToken({ userId: user._id, role: user.role });
     return success(res, 200, 'تم تسجيل الدخول بنجاح.', { token, user: user.toSafeObject() });
   } catch (err) {

@@ -13,8 +13,7 @@ const {
   updateQuestion,
   deleteQuestion
 } = require('../controllers/question.controller');
-const { getStatistics, getUsers } = require('../controllers/admin.controller');
-
+const { getStatistics, getUsers, deleteUser } = require('../controllers/admin.controller');
 const router = express.Router();
 
 // Every admin route requires a valid token AND the admin role.
@@ -34,6 +33,7 @@ router.delete('/questions/:id', deleteQuestion);
 
 // Users & statistics
 router.get('/users', getUsers);
+router.delete('/users/:id', deleteUser);
 router.get('/statistics', getStatistics);
 
 module.exports = router;

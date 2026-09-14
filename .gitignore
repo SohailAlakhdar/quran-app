@@ -3,3 +3,8 @@ dist/
 .env
 *.log
 .angular/
+
+data/
+surahs2.json
+
+seed/

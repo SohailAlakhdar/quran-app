@@ -71,6 +71,7 @@ export class SignupComponent {
       next: () => {
         this.toast.success('تم إنشاء الحساب بنجاح.');
         this.router.navigate(['/dashboard']);
+
       },
       complete: () => (this.submitting = false),
       error: () => (this.submitting = false)

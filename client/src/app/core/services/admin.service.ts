@@ -62,4 +62,7 @@ export class AdminService {
   deleteSurah(id: string) {
     return this.http.delete<ApiResponse<null>>(`${this.apiUrl}/surahs/${id}`);
   }
+  deleteUser(id: string) {
+  return this.http.delete<ApiResponse<null>>(`${this.apiUrl}/${id}`);
+}
 }

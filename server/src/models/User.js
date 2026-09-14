@@ -51,15 +51,11 @@ function normalizePassword(password) {
 userSchema.pre('save', async function hashPassword(next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
-  console.log('Hashing password for user:', normalizePassword(this.password));
-  this.password = normalizePassword(this.password)
-  // this.password = await bcrypt.hash(normalizePassword(this.password), salt);
-  console.log('normalize test:', normalizePassword('Ss123٠١٢'))
+  this.password = await bcrypt.hash(normalizePassword(this.password), salt);
   next();
 });
 
 userSchema.methods.comparePassword = function comparePassword(candidate) {
-  console.log('Hashing password for user:', normalizePassword(this.password));
   return bcrypt.compare(normalizePassword(candidate), this.password);
 };
 

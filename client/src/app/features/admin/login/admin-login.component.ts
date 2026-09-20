@@ -20,11 +20,11 @@ import { ToastService } from '../../../core/services/toast.service';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label class="form-label fw-semibold">اسم المستخدم</label>
-            <input type="text" class="form-control form-control-lg" formControlName="firstName">
+            <input type="text" class="form-control form-control-lg" formControlName="firstName" autocomplete="username">
           </div>
           <div class="mb-4">
             <label class="form-label fw-semibold">كلمة المرور</label>
-            <input type="password" class="form-control form-control-lg" formControlName="password">
+            <input type="password" class="form-control form-control-lg" formControlName="password"  autocomplete="current-password">
           </div>
           <button type="submit" class="btn btn-emerald btn-lg w-100" [disabled]="form.invalid || submitting">
             دخول

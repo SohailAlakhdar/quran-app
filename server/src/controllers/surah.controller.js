@@ -4,7 +4,7 @@ const { success, error } = require('../utils/apiResponse');
 // GET /api/surahs
 async function getSurahs(req, res, next) {
   try {
-    const surahs = await Surah.find().sort({ number: 1 });
+    const surahs = await Surah.find({ isActive: true }).sort({ number: 1 });
     return success(res, 200, 'تم جلب السور بنجاح.', { surahs });
   } catch (err) {
     next(err);

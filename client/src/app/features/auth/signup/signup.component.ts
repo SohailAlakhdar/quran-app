@@ -21,7 +21,7 @@ import { ToastService } from '../../../core/services/toast.service';
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="mb-3">
             <label class="form-label fw-semibold">الاسم الثلاثي</label>
-            <input type="text" class="form-control form-control-lg" formControlName="firstName" placeholder="اكتب اسمك">
+            <input type="text" class="form-control form-control-lg" formControlName="firstName" placeholder="اكتب اسمك" autocomplete="username">
             @if (form.controls.firstName.touched && form.controls.firstName.invalid) {
               <div class="text-danger small mt-1">الاسم يجب أن يكون بين 2 و 50 حرفاً.</div>
             }
@@ -29,7 +29,7 @@ import { ToastService } from '../../../core/services/toast.service';
 
           <div class="mb-4">
             <label class="form-label fw-semibold">كلمة المرور</label>
-            <input type="password" class="form-control form-control-lg" formControlName="password" placeholder="كلمة المرور">
+            <input type="password" class="form-control form-control-lg" formControlName="password" placeholder="كلمة المرور" autocomplete="current-password">
             @if (form.controls.password.touched && form.controls.password.invalid) {
               <div class="text-danger small mt-1">كلمة المرور يجب أن تكون 4 أحرف على الأقل.</div>
             }

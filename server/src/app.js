@@ -19,19 +19,13 @@ const app = express();
 
 app.use(helmet());
 
-const allowedOrigins = process.env.CLIENT_URL?.split(',') ?? [];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-  })
-);
+app.use(cors({
+  origin: [
+    'http://localhost:4200',
+    'https://quran-app-2.onrender.com'
+  ],
+  credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());

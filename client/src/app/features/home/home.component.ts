@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
         <h1 class="fw-bold display-5">رحلة القرآن</h1>
         <p class="lead">تعلم، تدبر، واستمتع بحفظ كتاب الله</p>
         <div class="d-flex gap-2 justify-content-center mt-4">
-          <a routerLink="/signup" class="btn btn-gold btn-lg">ابدأ الآن</a>
+          <!-- <a routerLink="/signup" class="btn btn-gold btn-lg">ابدأ الآن</a> -->
           <a routerLink="/login" class="btn btn-outline-light btn-lg">تسجيل الدخول</a>
         </div>
       </div>

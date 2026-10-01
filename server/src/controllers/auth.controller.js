@@ -5,8 +5,8 @@ const { success, error } = require('../utils/apiResponse');
 // POST /api/auth/signup
 async function signup(req, res, next) {
   try {
-    const { firstName, password } = req.body;
-
+    const firstName = req.body.firstName?.trim();
+    const { password } = req.body;
     const user = await User.create({ firstName, password, role: 'child' });
     const token = signToken({ userId: user._id, role: user.role });
     return success(res, 201, 'تم إنشاء الحساب بنجاح.', { token, user: user.toSafeObject() });
@@ -19,7 +19,7 @@ async function signup(req, res, next) {
     }
     next(err);
   }
-} 
+}
 
 // POST /api/auth/login
 async function login(req, res, next) {

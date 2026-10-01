@@ -4,6 +4,7 @@ const { signup, login, me, logout } = require('../controllers/auth.controller');
 const { protect } = require('../middleware/auth.middleware');
 const { validate } = require('../middleware/validate.middleware');
 const { signupValidator, loginValidator } = require('../validators/auth.validator');
+const { normalizeBodyDigits } = require('../utils/normalizeDigits.js');
 
 const router = express.Router();
 
@@ -15,8 +16,8 @@ const authLimiter = rateLimit({
   message: { success: false, message: 'محاولات كثيرة جداً، حاول لاحقاً.', errors: [] }
 });
 
-router.post('/signup', authLimiter, signupValidator, validate, signup);
-router.post('/login', authLimiter, loginValidator, validate, login);
+router.post('/signup', authLimiter, normalizeBodyDigits(['firstName', 'password']), signupValidator, validate, signup);
+router.post('/login', authLimiter, normalizeBodyDigits(['password']), loginValidator, validate, login);
 router.get('/me', protect, me);
 router.post('/logout', protect, logout);
 
